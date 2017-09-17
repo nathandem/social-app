@@ -1,0 +1,27 @@
+<!-- will be injected into other template files
+use case: break a long, complex template into several smaller ones -->
+
+<div class="post media">
+  <h3>{{post.message_html|safe}}</h3>
+  <div class="media-body">
+    <!-- <strong>{{post.user.username}}</strong> -->
+    <h5 class="media-heading">
+    <span>by </span>
+    <span class="username">
+      <a href="{% url 'posts:for_user' username=post.user.username %}">@{{post.user.username}}</a>
+      <!-- remember to pass the (k?)args required by a view when calling a certain url -->
+    </span>
+    <span>on {{post.created_at}}</span>
+    <!-- <time class="time"><a href="{% url 'posts:single' username=post.user.username pk=post.pk %}">{{post.created_at}}</a></time> -->
+    </h5>
+
+    <div class="media-footer">
+      {% if user.is_authenticated and post.user == user %}
+      <a href="{% url 'posts:delete' pk=post.pk %}" title='delete' class='btn btn-simple'>
+        <span class="glyphicon glyphicon-remove text-danger" aria-hidden='true' ></span>
+        <span class="text-danger icon-label">Delete</span>
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</div>

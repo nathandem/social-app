@@ -1,0 +1,41 @@
+{% extends "groups/group_base.html" %}
+
+{% block pregroup %}
+
+  <h1>{{group.name}} <span id="gr-detail-mb">- member count: {{group.members.count}}</span></h1>
+
+  <div class="content">
+
+    <p>test content</p>
+
+    {% if user in group.members.all %}
+      <a href="{% url 'groups:leave' slug=group.slug %}"
+      class="btn btn-lg btn-fill btn-warning">
+      <span class='glyphicon glyphicon-remove-circle'></span>Leave</a>
+
+    {% else %}
+      <a href="{% url 'groups:join' slug=group.slug %}"
+      class="btn btn-lg btn-fill btn-warning">
+      <span class='glyphicon glyphicon-ok-circle'></span>Join</a>
+
+    {% endif %}
+
+    <span><a href="{% url "posts:create" %}" class="btn btn-lg btn-primary">Create a post</a></span>
+
+  </div>
+
+{% endblock %}
+
+{% block group_content %}
+  <div class="col-md-8">
+    {% if group.posts.count == 0 %}
+      <h2>No posts in this group yet!</h2>
+    {% else %}
+      {% for post in group.posts.all %}
+        {% include "posts/_post.html" %}
+        {# include tag is to inject html content in the middle of a template - a bit like extends but on a smaller, more defined scale#}
+      {% endfor %}
+    {% endif %}
+
+  </div>
+{% endblock %}

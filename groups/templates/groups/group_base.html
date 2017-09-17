@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{# funny: group_base from which other templates of the group app extend, extends itself from base#}
+
+{% block content %}
+
+  <div class="container">
+    <div class="row">
+      {% block pregroup %}{% endblock %}
+      {% block group_content %}{% endblock %}
+      {% block postgroup %}{% endblock %}
+    </div>
+  </div>
+
+{% endblock %}

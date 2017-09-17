@@ -1,0 +1,57 @@
+{% extends "groups/group_base.html" %}
+
+{% block pregroup %}
+  <div class="col-md-4">
+    <div class="content">
+      {% if user.is_authenticated %}
+      <h2>Welcome back!
+      <!-- posts:for_user is the profile of the user -->
+        <a href="{url 'posts:for_user' username=user.username}">
+          @{{user.username}}
+        </a>
+      </h2>
+      {% endif %}
+      <h2>Groups</h2>
+      <p>Welcome to the groups page!</p>
+
+    </div>
+    {% if user.is_authenticated %}
+    <!-- checking for auth in the template allows to display the page for everyone,
+    with differences for auth and non-auth persons at certain places
+    VS demanding user is logged-in via LoginRequiredMixin class or @Loginrequired decorator
+    means that not logged-in users just can't see the page/ are redirect to log in -->
+    <a href="{% url 'groups:create' %}" class="btn btn-md btn-fill btn-warning">Create New Group!</a>
+
+    {% endif %}
+
+  </div>
+{% endblock %}
+
+<!-- When trying to understand a semi-long block of text like this one,
+focus only on the logic elements and don't pay attention to the css and div stuff.
+Here focus first on: block, for loop group in object_list, then what's displayed group.name group.members.count group.posts.count
+Once that's understood, look at the html structure and css styling of these elements -->
+{% block group_content %}
+  <div class="col-md-8">
+    <div class="list-group">
+      {% for group in object_list %}
+        <a class="list-group-item" href="{% url 'groups:single' slug=group.slug %}">
+          <h3 class='title list-group-item-heading'>{{group.name}}</h3>
+          <div class="list-group-item-text container-fluid">
+            {{group.description_html|safe}}
+            <div class="row">
+              <div class="col-md-4">
+                <span class="badge">{{group.members.count}}</span>
+                member{{group.members.count|pluralize}}
+              </div>
+              <div class="col-md-4">
+                <span class="badge">{{group.posts.count}}</span>
+                post{{group.posts.count|pluralize}}
+              </div>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
